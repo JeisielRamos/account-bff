@@ -7,7 +7,7 @@ import (
 	"github.com/joho/godotenv"
 )
 
-func healthCheck(ctx *fiber.Ctx) error {
+func HealthCheck(ctx *fiber.Ctx) error {
 	return ctx.Status(fiber.StatusOK).JSON(&fiber.Map{
 		"status": "success",
 	})
@@ -18,7 +18,7 @@ func main() {
 
 	app := fiber.New()
 
-	app.Get("/helthCheck", healthCheck)
+	app.Get("/helthCheck", HealthCheck)
 
 	httpPort := os.Getenv("HTTP_PORT")
 	if httpPort == "" {
