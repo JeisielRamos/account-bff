@@ -28,6 +28,10 @@ func main() {
 	accountController := controllers.NewAccountController(accountService)
 	routes.SetupAccountRouter(app, accountController)
 
+	loginService := services.NewLoginServices()
+	loginController := controllers.NewLoginController(loginService)
+	routes.SetupLoginRouter(app, loginController)
+
 	httpPort := os.Getenv("HTTP_PORT")
 	if httpPort == "" {
 		httpPort = "5000"

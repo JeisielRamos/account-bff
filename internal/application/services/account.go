@@ -30,8 +30,8 @@ func (service *AccountServices) Create(account *entities.Account) (*entities.Acc
 	}
 
 	hash, err := bcrypt.GenerateHash(account.Secret)
-	if err != nil {
-		return nil, &entities.Errors{StatusCode: fiber.StatusBadRequest, Message: err.Error()}
+	if err != nil || !bcrypt.CheckSecretHash(account.Secret, hash) {
+		return nil, &entities.Errors{StatusCode: fiber.StatusBadRequest, Message: "failed to generate hash secret"}
 	}
 	account.Secret = hash
 

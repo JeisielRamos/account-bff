@@ -74,3 +74,21 @@ func (repository *AccountRepository) GetFromAccountID(accountId string) (*models
 
 	return account, nil
 }
+
+func (repository *AccountRepository) GetFromCPF(cpf string) (*models.AccountModels, error) {
+	sql := `SELECT * FROM accounts where cpf='` + cpf + `' `
+	results, err := repository.instance.DB.Query(sql)
+	if err != nil {
+		return nil, err
+	}
+	account := new(models.AccountModels)
+
+	for results.Next() {
+		err = results.Scan(&account.ID, &account.Name, &account.CPF, &account.Secret, &account.Balance, &account.Created_at)
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	return account, nil
+}
