@@ -7,3 +7,8 @@ type Account struct {
 	Secret  string  `json:"secret"`
 	Balance float64 `json:"balance"`
 }
+
+type AccountBalance struct {
+	AccountId int     `json:"account_id"`
+	Balance   float64 `json:"balance"`
+}

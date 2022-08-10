@@ -42,5 +42,30 @@ func (service *AccountServices) Create(account *entities.Account) (*entities.Acc
 		return nil, &entities.Errors{StatusCode: fiber.StatusBadRequest, Message: err.Error()}
 	}
 
-	return models.ModelsToEntities(accountResp), nil
+	return models.ModelsToEntitiesAccount(accountResp), nil
+}
+
+func (service *AccountServices) GetAll() ([]*entities.Account, *entities.Errors) {
+
+	accountsResp, err := service.AccountRepository.GetAll()
+	if err != nil {
+		return nil, &entities.Errors{StatusCode: fiber.StatusBadRequest, Message: err.Error()}
+	}
+
+	accounts := make([]*entities.Account, 0)
+	for _, account := range accountsResp {
+		accounts = append(accounts, models.ModelsToEntitiesAccount(account))
+	}
+
+	return accounts, nil
+}
+
+func (service *AccountServices) GetBalenceFromAccountID(accountId string) (*entities.AccountBalance, *entities.Errors) {
+
+	accountResp, err := service.AccountRepository.GetFromAccountID(accountId)
+	if err != nil {
+		return nil, &entities.Errors{StatusCode: fiber.StatusBadRequest, Message: err.Error()}
+	}
+
+	return models.ModelsToEntitiesAccountBalance(accountResp), nil
 }

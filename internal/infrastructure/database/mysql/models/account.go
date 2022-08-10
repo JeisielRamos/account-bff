@@ -28,7 +28,7 @@ func EntitiesToModels(account *entities.Account) *AccountModels {
 	}
 }
 
-func ModelsToEntities(account *AccountModels) *entities.Account {
+func ModelsToEntitiesAccount(account *AccountModels) *entities.Account {
 	id, _ := strconv.Atoi(account.ID)
 	balance, _ := strconv.ParseFloat(account.Balance, 64)
 	return &entities.Account{
@@ -37,5 +37,14 @@ func ModelsToEntities(account *AccountModels) *entities.Account {
 		CPF:     account.CPF,
 		Secret:  account.Secret,
 		Balance: balance,
+	}
+}
+
+func ModelsToEntitiesAccountBalance(account *AccountModels) *entities.AccountBalance {
+	id, _ := strconv.Atoi(account.ID)
+	balance, _ := strconv.ParseFloat(account.Balance, 64)
+	return &entities.AccountBalance{
+		AccountId: id,
+		Balance:   balance,
 	}
 }
