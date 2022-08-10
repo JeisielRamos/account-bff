@@ -5,6 +5,10 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"
+	"gitlab.com/desafio-stone/account-bff/internal/application/services"
+	"gitlab.com/desafio-stone/account-bff/internal/infrastructure/database/mysql"
+	"gitlab.com/desafio-stone/account-bff/internal/infrastructure/http/fiber/controllers"
+	"gitlab.com/desafio-stone/account-bff/internal/infrastructure/http/fiber/routes"
 )
 
 func HealthCheck(ctx *fiber.Ctx) error {
@@ -15,10 +19,14 @@ func HealthCheck(ctx *fiber.Ctx) error {
 
 func main() {
 	godotenv.Load()
+	mysql.InitDBRepository()
 
 	app := fiber.New()
-
 	app.Get("/helthCheck", HealthCheck)
+
+	accountService := services.NewAccountServices()
+	accountController := controllers.NewAccountController(accountService)
+	routes.SetupAccountRouter(app, accountController)
 
 	httpPort := os.Getenv("HTTP_PORT")
 	if httpPort == "" {
