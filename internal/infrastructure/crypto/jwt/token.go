@@ -50,8 +50,3 @@ func ValidadeToken(signedToken string) error {
 	}
 	return nil
 }
-
-// err = jwt.ValidadeToken(token)
-// if err != nil {
-// 	return nil, &entities.Errors{StatusCode: fiber.StatusBadRequest, Message: err.Error()}
-// }

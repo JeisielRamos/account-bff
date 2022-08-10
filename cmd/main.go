@@ -8,6 +8,7 @@ import (
 	"gitlab.com/desafio-stone/account-bff/internal/application/services"
 	"gitlab.com/desafio-stone/account-bff/internal/infrastructure/database/mysql"
 	"gitlab.com/desafio-stone/account-bff/internal/infrastructure/http/fiber/controllers"
+	"gitlab.com/desafio-stone/account-bff/internal/infrastructure/http/fiber/middleware"
 	"gitlab.com/desafio-stone/account-bff/internal/infrastructure/http/fiber/routes"
 )
 
@@ -24,13 +25,15 @@ func main() {
 	app := fiber.New()
 	app.Get("/helthCheck", HealthCheck)
 
+	api := app.Group("/api", middleware.Authenticate)
+
 	accountService := services.NewAccountServices()
 	accountController := controllers.NewAccountController(accountService)
-	routes.SetupAccountRouter(app, accountController)
+	routes.SetupAccountRouter(api, accountController)
 
 	loginService := services.NewLoginServices()
 	loginController := controllers.NewLoginController(loginService)
-	routes.SetupLoginRouter(app, loginController)
+	routes.SetupLoginRouter(api, loginController)
 
 	httpPort := os.Getenv("HTTP_PORT")
 	if httpPort == "" {
