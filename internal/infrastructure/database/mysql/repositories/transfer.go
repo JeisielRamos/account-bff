@@ -1,7 +1,11 @@
 package repositories
 
 import (
+	"strconv"
+	"time"
+
 	"gitlab.com/desafio-stone/account-bff/internal/infrastructure/database/mysql"
+	"gitlab.com/desafio-stone/account-bff/internal/infrastructure/database/mysql/models"
 )
 
 type TransferRepository struct {
@@ -14,30 +18,21 @@ func NewtransferRepository() *TransferRepository {
 	}
 }
 
-// func (r *TransferRepository) Insert(rqPessoas *request.PessoasPostRq) (*response.PessoaResponse, error) {
-// 	status := "0"
-// 	if !rqPessoas.Status {
-// 		status = "1"
-// 	}
+func (repository *TransferRepository) Create(transfer *models.Transfer) (*models.Transfer, error) {
+	transfer.Created_at = time.Now().Format("2006-01-02T15:04:05")
+	sql := `INSERT INTO transfers(id, account_origin_id, account_destination_id, amount, created_at) 
+			VALUES (default, '` + transfer.Account_origin_id + `', '` + transfer.Account_destination_id + `', '` + transfer.Amount + `', '` + transfer.Created_at + `');`
 
-// 	sql := "INSERT INTO people(id, name, email, age, state) "
-// 	sql += "VALUES (default, '" + rqPessoas.Nome + "', '" + rqPessoas.Email + "', '" + rqPessoas.Idade + "', '" + status + "'); "
+	res, err := repository.instance.DB.Exec(sql)
+	if err != nil {
+		return nil, err
+	}
 
-// 	res, err := r.instance.DB.Exec(sql)
-// 	if err != nil {
-// 		return nil, err
-// 	}
+	lastId, err2 := res.LastInsertId()
+	if err2 != nil {
+		return nil, err
+	}
 
-// 	lastId, err2 := res.LastInsertId()
-// 	if err2 != nil {
-// 		return nil, err
-// 	}
-
-// 	rsp := new(response.PessoaResponse)
-// 	rsp.Id = int(lastId)
-// 	rsp.Nome = rqPessoas.Nome
-// 	rsp.Email = rqPessoas.Email
-// 	rsp.Idade, _ = strconv.Atoi(rqPessoas.Idade)
-// 	rsp.Status, _ = strconv.Atoi(status)
-// 	return rsp, nil
-// }
+	transfer.ID = strconv.Itoa(int(lastId))
+	return transfer, nil
+}

@@ -10,7 +10,7 @@ const ACCOUNT_POST = "/accounts"
 const ACCOUNT_GET_BALANCE = "/accounts/:account_id/balance"
 
 func SetupAccountRouter(router fiber.Router, controller *controllers.AccountController) {
-	router.Get(ACCOUNT_GET, controller.GetAll)
+	router.Get(ACCOUNT_GET, controller.GetAllAccount)
 	router.Get(ACCOUNT_GET_BALANCE, controller.GetAccountBalance)
-	router.Post(ACCOUNT_POST, controller.Create)
+	router.Post(ACCOUNT_POST, controller.CreateAccount)
 }

@@ -28,7 +28,7 @@ func GenerateToken(cpf string) (string, error) {
 	return tokenString, err
 }
 
-func ValidadeToken(signedToken string) error {
+func ValidadeToken(signedToken string) (string, error) {
 	token, err := jwt.ParseWithClaims(
 		signedToken,
 		&Claims{},
@@ -37,16 +37,17 @@ func ValidadeToken(signedToken string) error {
 		},
 	)
 	if err != nil {
-		return err
+		return "", err
 	}
 	claims, ok := token.Claims.(*Claims)
 	if !ok {
 		err = errors.New("couldn't parse claims")
-		return err
+		return "", err
 	}
 	if claims.ExpiresAt < time.Now().Local().Unix() {
 		err = errors.New("token expired")
-		return err
+		return "", err
 	}
-	return nil
+
+	return claims.Cpf, nil
 }

@@ -31,9 +31,13 @@ func main() {
 	accountController := controllers.NewAccountController(accountService)
 	routes.SetupAccountRouter(api, accountController)
 
+	transferService := services.NewTransferServices()
+	transferController := controllers.NewTransferController(transferService)
+	routes.SetupTransferRouter(api, transferController)
+
 	loginService := services.NewLoginServices()
 	loginController := controllers.NewLoginController(loginService)
-	routes.SetupLoginRouter(api, loginController)
+	routes.SetupLoginRouter(app, loginController)
 
 	httpPort := os.Getenv("HTTP_PORT")
 	if httpPort == "" {

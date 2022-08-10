@@ -7,7 +7,9 @@ import (
 	"gitlab.com/desafio-stone/account-bff/internal/domain/entities"
 )
 
-type AccountModels struct {
+type AccountModels struct{}
+
+type Account struct {
 	ID         string
 	Name       string
 	CPF        string
@@ -16,9 +18,9 @@ type AccountModels struct {
 	Created_at string
 }
 
-func EntitiesToModels(account *entities.Account) *AccountModels {
+func (m *AccountModels) EntitiesToModels(account *entities.Account) *Account {
 	balance := fmt.Sprintf("%f", account.Balance)
-	return &AccountModels{
+	return &Account{
 		"",
 		account.Name,
 		account.CPF,
@@ -28,7 +30,7 @@ func EntitiesToModels(account *entities.Account) *AccountModels {
 	}
 }
 
-func ModelsToEntitiesAccount(account *AccountModels) *entities.Account {
+func (m *AccountModels) ModelsToEntitiesAccount(account *Account) *entities.Account {
 	id, _ := strconv.Atoi(account.ID)
 	balance, _ := strconv.ParseFloat(account.Balance, 64)
 	return &entities.Account{
@@ -40,7 +42,7 @@ func ModelsToEntitiesAccount(account *AccountModels) *entities.Account {
 	}
 }
 
-func ModelsToEntitiesAccountBalance(account *AccountModels) *entities.AccountBalance {
+func (m *AccountModels) ModelsToEntitiesAccountBalance(account *Account) *entities.AccountBalance {
 	id, _ := strconv.Atoi(account.ID)
 	balance, _ := strconv.ParseFloat(account.Balance, 64)
 	return &entities.AccountBalance{

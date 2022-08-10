@@ -20,7 +20,7 @@ func NewAccountServices() *AccountServices {
 	}
 }
 
-func (service *AccountServices) Create(account *entities.Account) (*entities.Account, *entities.Errors) {
+func (service *AccountServices) CreateAccount(account *entities.Account) (*entities.Account, *entities.Errors) {
 	if len(account.Name) < 1 {
 		return nil, &entities.Errors{StatusCode: fiber.StatusBadRequest, Message: "name cannot be empty"}
 	}
@@ -35,26 +35,28 @@ func (service *AccountServices) Create(account *entities.Account) (*entities.Acc
 	}
 	account.Secret = hash
 
-	accountModels := models.EntitiesToModels(account)
+	actModels := new(models.AccountModels)
+	accountModels := actModels.EntitiesToModels(account)
 
 	accountResp, err := service.AccountRepository.Create(accountModels)
 	if err != nil {
 		return nil, &entities.Errors{StatusCode: fiber.StatusBadRequest, Message: err.Error()}
 	}
 
-	return models.ModelsToEntitiesAccount(accountResp), nil
+	return actModels.ModelsToEntitiesAccount(accountResp), nil
 }
 
-func (service *AccountServices) GetAll() ([]*entities.Account, *entities.Errors) {
+func (service *AccountServices) GetAllAccount() ([]*entities.Account, *entities.Errors) {
 
 	accountsResp, err := service.AccountRepository.GetAll()
 	if err != nil {
 		return nil, &entities.Errors{StatusCode: fiber.StatusBadRequest, Message: err.Error()}
 	}
 
+	actModels := new(models.AccountModels)
 	accounts := make([]*entities.Account, 0)
 	for _, account := range accountsResp {
-		accounts = append(accounts, models.ModelsToEntitiesAccount(account))
+		accounts = append(accounts, actModels.ModelsToEntitiesAccount(account))
 	}
 
 	return accounts, nil
@@ -67,5 +69,6 @@ func (service *AccountServices) GetBalenceFromAccountID(accountId string) (*enti
 		return nil, &entities.Errors{StatusCode: fiber.StatusBadRequest, Message: err.Error()}
 	}
 
-	return models.ModelsToEntitiesAccountBalance(accountResp), nil
+	actModels := new(models.AccountModels)
+	return actModels.ModelsToEntitiesAccountBalance(accountResp), nil
 }

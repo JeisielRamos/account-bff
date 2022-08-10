@@ -16,7 +16,7 @@ func NewAccountController(accountService *services.AccountServices) *AccountCont
 	}
 }
 
-func (controller *AccountController) Create(ctx *fiber.Ctx) error {
+func (controller *AccountController) CreateAccount(ctx *fiber.Ctx) error {
 	account := new(entities.Account)
 
 	err := ctx.BodyParser(&account)
@@ -24,7 +24,7 @@ func (controller *AccountController) Create(ctx *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusBadRequest, err.Error())
 	}
 
-	accountCreated, errors := controller.accountService.Create(account)
+	accountCreated, errors := controller.accountService.CreateAccount(account)
 	if errors != nil {
 		return ctx.Status(errors.StatusCode).JSON(errors.Message)
 	}
@@ -32,9 +32,9 @@ func (controller *AccountController) Create(ctx *fiber.Ctx) error {
 	return ctx.JSON(accountCreated)
 }
 
-func (controller *AccountController) GetAll(ctx *fiber.Ctx) error {
+func (controller *AccountController) GetAllAccount(ctx *fiber.Ctx) error {
 
-	accountRsp, errors := controller.accountService.GetAll()
+	accountRsp, errors := controller.accountService.GetAllAccount()
 	if errors != nil {
 		return ctx.Status(errors.StatusCode).JSON(errors.Message)
 	}
