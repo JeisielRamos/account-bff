@@ -26,7 +26,7 @@ func (controller *LoginController) AuthenticateUser(ctx *fiber.Ctx) error {
 
 	tokenRsp, errors := controller.loginService.AuthenticateUser(login)
 	if errors != nil {
-		return ctx.Status(errors.StatusCode).JSON(errors.Message)
+		return ctx.Status(errors.StatusCode).JSON(errors)
 	}
 
 	return ctx.JSON(tokenRsp)

@@ -1,0 +1,23 @@
+version: '3'
+services:
+  db:
+    image: mysql:8
+    environment:
+      MYSQL_DATABASE: bank
+      MYSQL_USER: root
+      MYSQL_PASSWORD: Jro260297.!
+      MYSQL_ROOT_PASSWORD: Jro260297.!
+    ports:
+      - "3306:3306"
+    tty: true
+  
+  app:
+    build:
+      context: ./
+      dockerfile: dockerfile
+    ports: 
+      - "4000:4000"
+      - "5000:5000"
+    depends_on: 
+      - db
+    tty: true
