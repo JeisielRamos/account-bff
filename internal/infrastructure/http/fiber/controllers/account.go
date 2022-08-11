@@ -26,7 +26,7 @@ func (controller *AccountController) CreateAccount(ctx *fiber.Ctx) error {
 
 	accountCreated, errors := controller.accountService.CreateAccount(account)
 	if errors != nil {
-		return ctx.Status(errors.StatusCode).JSON(errors.Message)
+		return ctx.Status(errors.StatusCode).JSON(errors)
 	}
 
 	return ctx.JSON(accountCreated)
@@ -36,7 +36,7 @@ func (controller *AccountController) GetAllAccount(ctx *fiber.Ctx) error {
 
 	accountRsp, errors := controller.accountService.GetAllAccount()
 	if errors != nil {
-		return ctx.Status(errors.StatusCode).JSON(errors.Message)
+		return ctx.Status(errors.StatusCode).JSON(errors)
 	}
 
 	return ctx.JSON(accountRsp)
@@ -48,7 +48,7 @@ func (controller *AccountController) GetAccountBalance(ctx *fiber.Ctx) error {
 
 	accountRsp, errors := controller.accountService.GetBalenceFromAccountID(account_id)
 	if errors != nil {
-		return ctx.Status(errors.StatusCode).JSON(errors.Message)
+		return ctx.Status(errors.StatusCode).JSON(errors)
 	}
 
 	return ctx.JSON(accountRsp)

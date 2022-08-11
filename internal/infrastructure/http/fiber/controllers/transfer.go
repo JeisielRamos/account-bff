@@ -26,7 +26,7 @@ func (controller *TransferController) AccountToAccountTransfer(ctx *fiber.Ctx) e
 	cpfUser := ctx.Locals("user").(string)
 	transferRsp, errors := controller.transferServices.TransferAccountToAccount(cpfUser, transfer)
 	if errors != nil {
-		return ctx.Status(errors.StatusCode).JSON(errors.Message)
+		return ctx.Status(errors.StatusCode).JSON(errors)
 	}
 
 	return ctx.JSON(transferRsp)
@@ -38,7 +38,7 @@ func (controller *TransferController) GetAccountTransfer(ctx *fiber.Ctx) error {
 
 	transferRsp, errors := controller.transferServices.GetAccountTransfer(cpfUser)
 	if errors != nil {
-		return ctx.Status(errors.StatusCode).JSON(errors.Message)
+		return ctx.Status(errors.StatusCode).JSON(errors)
 	}
 
 	return ctx.JSON(transferRsp)

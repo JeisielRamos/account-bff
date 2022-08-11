@@ -23,7 +23,7 @@ func main() {
 	mysql.InitDBRepository()
 
 	app := fiber.New()
-	app.Get("/helthCheck", HealthCheck)
+	app.Get("/healthCheck", HealthCheck)
 
 	api := app.Group("/api", middleware.Authenticate)
 
