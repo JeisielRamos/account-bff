@@ -71,6 +71,23 @@ func (service *TransferServices) TransferAccountToAccount(cpfUser string, transf
 	return tsfModels.ModelsToEntities(transferResp), nil
 }
 
-func (service *TransferServices) Get() {
+func (service *TransferServices) GetAccountTransfer(cpfUser string) ([]*entities.Transfer, *entities.Errors) {
 
+	accountOrigin, err := service.AccountRepository.GetFromCPF(cpfUser)
+	if err != nil {
+		return nil, &entities.Errors{StatusCode: fiber.StatusBadRequest, Message: err.Error()}
+	}
+
+	transfers, err := service.TransferRepository.GetAllFromAccountOrigin(accountOrigin.ID)
+	if err != nil {
+		return nil, &entities.Errors{StatusCode: fiber.StatusBadRequest, Message: err.Error()}
+	}
+
+	tsfModels := new(models.TransferModels)
+	transfersRsp := make([]*entities.Transfer, 0)
+	for _, transfer := range transfers {
+		transfersRsp = append(transfersRsp, tsfModels.ModelsToEntities(transfer))
+	}
+
+	return transfersRsp, nil
 }
